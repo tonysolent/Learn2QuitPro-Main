@@ -23,60 +23,34 @@ Welcome to Learn2Quit Pro - "Knowledge to Quit, Tools to Succeed". This project 
    - Firebase project setup for database and authentication services.
 
 2. **Clone the repository**:
+git clone https://github.com/tonysolent/Learn2QuitPro-Main.git
 
+3. **Install dependencies**:
+Navigate to the project directory and run:npm install
 
+4. **Configure Firebase**:
+Create a `.env` file in the root directory and add your Firebase configuration:
 
-
-
-
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
-
-## Getting Started
-
-First, run the development server:
-
-```bash
-npm install
-and 
+6. **Start the development server**:
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Usage
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+- **For Users**:
+- Explore various quitting smoking resources available on the homepage.
+- Use the chatbot for personalized guidance and support.
+- Access the map to find nearby smoking cessation centers.
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+- **For Admins**:
+- Log in with admin credentials to access the dashboard.
+- Add or manage products, view order history, and interact with user queries through the chatbot.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+## Contributing
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+Contributions to Learn2Quit Pro are welcome! Please follow the standard GitHub pull request process to propose changes or improvements.
 
-## Learn More
+## License
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+Learn2Quit Pro is released under the MIT License. See the `LICENSE` file for more details.
 
 
-
-
-
-
-
-
-
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
