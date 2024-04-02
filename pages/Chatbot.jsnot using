@@ -1,0 +1,77 @@
+import React, { useState } from 'react';
+
+function Chatbot() {
+  const [userMessage, setUserMessage] = useState('');
+  const [conversation, setConversation] = useState([]);
+  const [isOpen, setIsOpen] = useState(false); // State to toggle chatbox
+
+  const handleInputChange = (e) => setUserMessage(e.target.value);
+
+  const handleSendMessage = async () => {
+    if (!userMessage.trim()) return; // Prevent sending empty messages
+    const messageToSend = userMessage;
+    setUserMessage(''); // Clear input field
+    setConversation([...conversation, { from: 'user', message: messageToSend }]);
+  
+    try {
+      // Call your backend API to send the message to Dialogflow
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message: messageToSend }),
+      });
+      if (!response.ok) throw new Error('Network response was not ok.');
+      const { reply } = await response.json();
+  
+      // Update the conversation with the response from Dialogflow
+      setConversation(conversation => [...conversation, { from: 'bot', message: reply }]);
+    } catch (error) {
+      console.error("Error sending message:", error);
+      // Optionally, update the conversation with an error message
+      setConversation(conversation => [...conversation, { from: 'bot', message: "Sorry, I couldn't understand that." }]);
+    }
+  };
+  
+
+  return (
+    <div style={{ position: 'fixed', bottom: '20px', right: '20px' }}>
+      <button onClick={() => setIsOpen(!isOpen)} style={{ fontSize: '24px', cursor: 'pointer' }}>
+        {isOpen ? 'Close' : 'Chat'}
+      </button>
+      {isOpen && (
+        <div style={{
+          width: '300px',
+          height: '400px',
+          backgroundColor: 'white',
+          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+          borderRadius: '15px',
+          padding: '10px',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+        }}>
+          <div style={{ overflowY: 'auto' }}>
+            {conversation.map((msg, index) => (
+              <p key={index} style={{ textAlign: msg.from === 'user' ? 'right' : 'left' }}>
+                <b>{msg.from === 'user' ? 'You: ' : 'Bot: '}</b>{msg.message}
+              </p>
+            ))}
+          </div>
+          <div>
+            <input
+              type="text"
+              value={userMessage}
+              onChange={handleInputChange}
+              style={{ width: '80%', marginRight: '5px' }}
+            />
+            <button onClick={handleSendMessage}>Send</button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default Chatbot;

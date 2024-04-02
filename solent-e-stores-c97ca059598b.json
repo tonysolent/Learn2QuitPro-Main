@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "solent-e-stores",
+  "private_key_id": "c97ca059598b395a9b200f45b8cb01165b22cf72",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQC331K4RrK/M6T/\njxexCeE9f5hs/ndNzAtZPfQeFenngZIMZxdlpYrElXuOZUg+NKuuOEHxKjhC8kPf\n1ebzktQM3MENu16u2VHTI89MyMwVueAQ0gJi5ceVRgGuNkBjNo2g7JRg6KEEnrUb\nvSxiQPYICEcGGZrw+9NzCBmDI4jG1pHhnzCHIge8JyY92WlmHFYkVawsPlLIPHvR\n4CrX5LzQtvYJAYoSl3PXYEjQsIzYX6kiseAUEpLLAUkVhI2jPxdhpe9Yzy1ReXW5\nz1EAWp9Qftyvlp1JunR6H2Es0wZgV0dqBl8Y+dH59eSG1vydXlHS6Y/rGbacaUff\n1r5vBDXZAgMBAAECggEAEy2IT68UCqxEy+DtXCpHI2ZxDAE4iVU8Y8j58r9fX6Wc\niY2hG5l6EUn0EqSOtepBc9DrU8+PAbCKEskZJxOL6XGG8zs1Q3BoP+juwLf6zVNP\nQwHcfNsxh2i/WR/QdGimuf+i9D6fOL+i7Ss8e10CLFFMsx6tke/6HHfeTVbB99cR\nHuCee2MpISmPjvkKose++Sbc3L8DQsVJc0E1eERfZWQLTraJj8Rm0remIuHZ3/vM\nCJ8O8k9cf5mZn5V5KWsY1ycj3dTxFSkgRQTFwm9A02kXza5yYgjAN6Zv7u/rB7iz\nYcs5+lTN/6B8jj2Rx9S5MxxQNzBEIYUSmhc3dq3aNwKBgQDjHVzpRUKQbfLrPRaa\n+EyOPQrekZ9GJg+mCqYEAukrQNIXvFJvuolHO+C34R56NvTIMI+qZT1y+MHftdtI\nIEXU9HGjskeWQnx50Y54Z9qpfSpdZcFIZqwKlBcNvSYqnOSKYAwS4ZMyocZdBnzI\ndFSBwb5y0EEKWohiID5TDE83xwKBgQDPQgfqVv2AZOR85c+SwbBUsAnhX9O5hJYt\nkCYRupqegq0FS7KE+c9YjWYaxmltoBATqITpIw1FdiaSqDhO+OFReQVeNXOwEoUC\nt87jrHE7Z4KXkMHV7UtWgJujb/r7zEv9rjem4mmpkkE8rvTD9Y+gP2bfxySTP2r1\nP0sPsHtlXwKBgHkadSqmFeJx3nB1eJJWCGxoPF2GBQogzYNadj/5VWANBnpFnyeY\nrg7f7OngDqJYn5oH2vOfXG7sGmUx0aXaH6J4XghNzkJfXYSPq4qkxkJOTcLTuYbj\nyKUzZj+bNrjOREdNA+MliZocDWwZQ3yYG1+9cdJDHgtpTwQT8WfTToKNAoGASHiK\nVAK++ZpN2u5wupxHkBVOHyRm4EPgT2ZMKX7aefqvjV5+uciwHAK1ZT9jthV2Camv\nb+X1yggaTMXNiq+z+c0bd2mxXivbnquvCCVQIrl7DIxteuRSp5io02lglZNGLxow\nE4av879UWGfE5pCC/EGvMyhrPaG7QK41DPNk8nkCgYBmeVHHHQROvsGvnppGbgoe\nHbWnaHqxyHhtkAx4Uuc+drcqlJq7JqAf5AvsP5SObcKGv8LbIMhD0qE1K/24i+Gi\ntEh8FPNVqIYjAlPv96WHtIXNOUzkaH5ubaKs0lALu9xB0JYP9+kbTIsesDbc58qP\nZ1woEV9DAZJFHLZuwcFjLA==\n-----END PRIVATE KEY-----\n",
+  "client_email": "quitsmoking@solent-e-stores.iam.gserviceaccount.com",
+  "client_id": "106789784408083916549",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/quitsmoking%40solent-e-stores.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

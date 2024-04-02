@@ -1,0 +1,217 @@
+import { initializeApp } from 'firebase/app';
+import { getDoc } from 'firebase/firestore';
+import { getFirestore, collection, getDocs, doc, updateDoc, writeBatch, setDoc, addDoc, deleteDoc } from 'firebase/firestore';
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import React, { useState, useEffect } from 'react';
+import ProductList from './ProductList';
+import SearchBar from './SearchBar';
+import ShoppingCart from './ShoppingCart';
+import OrderHistory from './OrderHistory';
+import Login from './Login';
+import AddProduct from './AddProduct';
+import ProductListAdmin from './ProductListAdmin';
+
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAgkAnBVEZF8uR1g-riwHY3CRekHXt5n7o",
+  authDomain: "solent-e-stores.firebaseapp.com",
+  projectId: "solent-e-stores",
+  storageBucket: "solent-e-stores.appspot.com",
+  messagingSenderId: "1023431440643",
+  appId: "1:1023431440643:web:91f554fe21ec417ae11136",
+  measurementId: "G-72FFPE3BR9" 
+};
+
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+
+function App() {
+  const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [cartItems, setCartItems] = useState([]);
+  const [orders, setOrders] = useState([]);
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [user, setUser] = useState(null);
+  const [userBalance, setUserBalance] = useState(50000);
+
+  useEffect(() => {
+    const fetchProductsFromFirestore = async () => {
+      const productsCollectionRef = collection(db, 'products');
+      const querySnapshot = await getDocs(productsCollectionRef);
+      const productsData = querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+      setProducts(productsData);
+      setFilteredProducts(productsData);
+    };
+
+    fetchProductsFromFirestore();
+  }, [db]);
+
+  const handleSearch = (searchTerm) => {
+    const filtered = products.filter((product) => {
+      const nameMatch = product.name.toLowerCase().includes(searchTerm.toLowerCase());
+      const typeMatch = product.type.toLowerCase().includes(searchTerm.toLowerCase());
+      const manufacturerMatch = product.manufacturer.toLowerCase().includes(searchTerm.toLowerCase());
+      return nameMatch || typeMatch || manufacturerMatch;
+    });
+    setFilteredProducts(filtered);
+  };
+
+  const handleCheckout = async () => {
+    if (cartItems.length > 0) {
+      const totalCost = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+  
+      if (user && userBalance >= totalCost) {
+        setUserBalance(userBalance - totalCost);
+  
+        const userBalanceRef = doc(db, 'user_balance', 'user_balance');
+        const userBalanceSnapshot = await getDoc(userBalanceRef);
+  
+        if (userBalanceSnapshot.exists()) {
+          const newBalance = userBalanceSnapshot.data().balance - totalCost;
+          await updateDoc(userBalanceRef, { balance: newBalance });
+        } else {
+          await setDoc(userBalanceRef, { balance: userBalance - totalCost });
+        }
+  
+        const batch = writeBatch(db);
+  
+        for (const cartItem of cartItems) {
+          const productRef = doc(db, 'products', cartItem.id);
+          const productDoc = await getDoc(productRef);
+  
+          if (productDoc.exists()) {
+            const productData = productDoc.data();
+            const newQuantity = productData.quantityInStock - cartItem.quantity;
+            batch.update(productRef, { quantityInStock: newQuantity });
+          } else {
+            console.error(`Product with ID ${cartItem.id} not found.`);
+          }
+        }
+  
+        // Commit the batch of updates
+        await batch.commit();
+  
+        const newOrder = {
+          id: new Date().getTime(),
+          date: new Date().toLocaleString(),
+          products: cartItems,
+        };
+  
+        setOrders((prevOrders) => [newOrder, ...prevOrders]);
+        setCartItems([]);
+      } else {
+        alert('Insufficient balance to make the purchase.');
+      }
+    }
+  };
+  
+  
+  
+  
+
+  const handleSelectOrder = (order) => {
+    setSelectedOrder(order);
+  };
+
+  const handleLogin = (loggedInUser) => {
+    setUser(loggedInUser);
+  };
+
+  const handleAddToCart = (product) => {
+    const existingItem = cartItems.find((item) => item.id === product.id);
+    if (existingItem) {
+      const updatedCartItems = cartItems.map((item) =>
+        item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+      );
+      setCartItems(updatedCartItems);
+    } else {
+      setCartItems([...cartItems, { ...product, quantity: 1 }]);
+    }
+  };
+
+  const handleRemoveFromCart = (product) => {
+    const existingItem = cartItems.find((item) => item.id === product.id);
+    if (existingItem) {
+      if (existingItem.quantity === 1) {
+        const updatedCartItems = cartItems.filter((item) => item.id !== product.id);
+        setCartItems(updatedCartItems);
+      } else {
+        const updatedCartItems = cartItems.map((item) =>
+          item.id === product.id ? { ...item, quantity: item.quantity - 1 } : item
+        );
+        setCartItems(updatedCartItems);
+      }
+    }
+  };
+
+  const handleAddProduct = (newProduct) => {
+    if (!newProduct.price) {
+      alert('Please enter the price for the new product.');
+      return;
+    }
+
+    setProducts((prevProducts) => [...prevProducts, newProduct]);
+    setFilteredProducts((prevProducts) => [...prevProducts, newProduct]);
+  };
+
+  const handleEditProduct = (editedProduct) => {
+    const productIndex = products.findIndex((product) => product.id === editedProduct.id);
+
+    if (productIndex !== -1) {
+      const updatedProducts = [...products];
+      updatedProducts[productIndex] = editedProduct;
+      setProducts(updatedProducts);
+
+      if (filteredProducts.length > 0) {
+        const filteredProductIndex = filteredProducts.findIndex((product) => product.id === editedProduct.id);
+        if (filteredProductIndex !== -1) {
+          const updatedFilteredProducts = [...filteredProducts];
+          updatedFilteredProducts[filteredProductIndex] = editedProduct;
+          setFilteredProducts(updatedFilteredProducts);
+        }
+      }
+    }
+  };
+
+  const handleDeleteProduct = (productId) => {
+    const updatedProducts = products.filter((product) => product.id !== productId);
+    setProducts(updatedProducts);
+
+    if (filteredProducts.length > 0) {
+      const updatedFilteredProducts = filteredProducts.filter((product) => product.id !== productId);
+      setFilteredProducts(updatedFilteredProducts);
+    }
+  };
+
+  return (
+    <div>
+      <h1>Solent E-Stores</h1>
+      {user ? (
+        <div>
+          <p>Welcome, {user.username}! {user.isAdmin ? '(Admin)' : '(User)'}</p>
+          <p>Virtual Balance: ${userBalance.toFixed(2)}</p>
+          <button onClick={() => setUser(null)}>Logout</button>
+          <SearchBar onSearch={handleSearch} />
+          {user.isAdmin && <AddProduct onAddProduct={handleAddProduct} />}
+          {user.isAdmin && (
+            <ProductListAdmin
+              products={products}
+              onEditProduct={handleEditProduct}
+              onDeleteProduct={handleDeleteProduct}
+            />
+          )}
+          <ProductList products={filteredProducts} onAddToCart={handleAddToCart} />
+          <ShoppingCart cartItems={cartItems} onAddToCart={handleAddToCart} onRemoveFromCart={handleRemoveFromCart} />
+          <button onClick={handleCheckout}>Checkout</button>
+          <OrderHistory orders={orders} onSelectOrder={handleSelectOrder} selectedOrder={selectedOrder} />
+        </div>
+      ) : (
+        <Login onLogin={handleLogin} />
+      )}
+    </div>
+  );
+}
+
+export default App;

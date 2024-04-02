@@ -1,0 +1,148 @@
+import React, { useState } from 'react';
+
+const QuitSmokingQuiz = ({ onClose }) => {
+  const [questionIndex, setQuestionIndex] = useState(0);
+  const [answers, setAnswers] = useState([]);
+  const [score, setScore] = useState(0);
+  const [quizCompleted, setQuizCompleted] = useState(false);
+
+  const questions = [
+    {
+      question: 'How many cigarettes do you smoke per day?',
+      options: ['None', '1-10', '11-20', '21+'],
+      scores: [0, 5, 3, 1],
+    },
+    {
+      question: 'How soon after waking up do you smoke your first cigarette?',
+      options: ['Within 5 minutes', '6-30 minutes', '31-60 minutes', 'After 60 minutes'],
+      scores: [5, 3, 1, 0],
+    },
+    {
+      question: 'Do you smoke even when you are sick?',
+      options: ['Yes', 'No'],
+      scores: [1, 0],
+    },
+    {
+      question: 'Do you find it difficult to refrain from smoking in places where it is forbidden?',
+      options: ['Yes', 'No'],
+      scores: [1, 0],
+    },
+    {
+      question: 'Do you want to quit smoking?',
+      options: ['Yes', 'No'],
+      scores: [5, 0],
+    },
+  ];
+
+  const handleAnswer = (answer, score) => {
+    const updatedAnswers = [...answers];
+    updatedAnswers[questionIndex] = answer;
+    
+    let updatedScore = 0;
+    
+    switch (questionIndex) {
+        case 0:
+            if (answer === "1-10") {
+                updatedScore = 5;
+            }
+            break;
+        case 1:
+            if (answer === "Within 5 minutes") {
+                updatedScore = 5;
+            }
+            break;
+        case 2:
+            if (answer === "No") {
+                updatedScore = 5;
+            }
+            break;
+        case 3:
+            if (answer === "Yes") {
+                updatedScore = 5;
+            }
+            break;
+        case 4:
+            if (answer === "Yes") {
+                updatedScore = 5;
+            }
+            break;
+        default:
+            break;
+    }
+    
+    const newScore = score + updatedScore;
+    
+    setAnswers(updatedAnswers);
+    setScore(newScore);
+    
+    if (questionIndex < questions.length - 1) {
+        setQuestionIndex(questionIndex + 1);
+    } else {
+        setQuizCompleted(true);
+        console.log('Quiz completed! Answers:', updatedAnswers);
+        console.log('Total score:', newScore);
+    }
+};
+
+  const getRecommendations = () => {
+    if (score >= 10) {
+      return 'Congratulations! You are ready to quit smoking. Seek support and start your journey to a smoke-free life.';
+    } else if (score >= 5) {
+      return 'You are on the right track. Consider making some changes to your smoking habits and seek support when you are ready.';
+    } else {
+      return 'It seems like you are not quite ready to quit smoking. Take some time to reflect on your smoking habits and consider seeking support when you are ready.';
+    }
+  };
+
+  const resetQuiz = () => {
+    setQuestionIndex(0);
+    setAnswers([]);
+    setScore(0);
+    setQuizCompleted(false);
+  };
+
+  const createElement = React.createElement;
+
+  return createElement(
+    'div',
+    { style: { padding: '20px', maxWidth: '600px', margin: '0 auto' } },
+    quizCompleted ? createElement(
+      'div',
+      null,
+      createElement('p', null, getRecommendations()),
+      createElement('p', null, 'Your selected answers:'),
+      createElement(
+        'ul',
+        null,
+        answers.map((answer, index) => createElement('li', { key: index }, `${questions[index].question}: ${answer}`))
+      ),
+      createElement(
+        'button',
+        { onClick: resetQuiz, style: { backgroundColor: '#0052cc', color: 'white', padding: '10px 15px', border: 'none', borderRadius: '5px', cursor: 'pointer', transition: 'background-color 0.3s', marginRight: '10px' } },
+        'Retake Quiz'
+      ),
+      createElement(
+        'button',
+        { onClick: onClose, style: { backgroundColor: '#0052cc', color: 'white', padding: '10px 15px', border: 'none', borderRadius: '5px', cursor: 'pointer', transition: 'background-color 0.3s' } },
+        'Close'
+      )
+    ) : createElement(
+      React.Fragment,
+      null,
+      createElement('h3', null, questions[questionIndex].question),
+      createElement(
+        'div',
+        null,
+        questions[questionIndex].options.map((option, index) =>
+          createElement(
+            'button',
+            { key: index, onClick: () => handleAnswer(option, questions[questionIndex].scores[index]), style: { marginRight: '10px', backgroundColor: '#0052cc', color: 'white', padding: '10px 15px', border: 'none', borderRadius: '5px', cursor: 'pointer', transition: 'background-color 0.3s' } },
+            option
+          )
+        )
+      )
+    )
+  );
+};
+
+export default QuitSmokingQuiz;

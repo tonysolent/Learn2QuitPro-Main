@@ -1,0 +1,28 @@
+:root {
+    --text-size: 100%;
+  }
+  
+  .high-contrast {
+    filter: contrast(2);
+  }
+  
+  body {
+    font-size: var(--text-size);
+  }
+  
+  .accessibility-menu {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    background-color: #fff;
+    border: 1px solid #000;
+    padding: 10px;
+    z-index: 1000;
+  }
+  
+  .accessibility-menu button {
+    margin: 5px;
+  }
+  
+  /* Add styles for focus indicators, scalable text, and other features as needed */
+  

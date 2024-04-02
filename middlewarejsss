@@ -1,0 +1,20 @@
+import { NextResponse } from 'next/server';
+import { getIronSession } from 'iron-session';
+import { cookies } from 'next/headers';
+
+
+export async function middleware(request) {
+  const session = await getIronSession(cookies(request), { password, cookieName });
+
+  if (!session.username && !request.nextUrl.pathname.startsWith("/login")) {
+    return NextResponse.redirect(new URL("/login", request.url));
+  } else {
+    console.log("Forwarding to the next middleware...");
+    return NextResponse.next();
+  }
+}
+
+export const config = {
+    matcher: ['/index', '/ProductList'],
+
+};
